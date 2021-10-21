@@ -1,4 +1,10 @@
 /*
+To re-run this file we must delete current output
+*/
+
+fs -rm -r output/cleaned_movies
+
+/*
 Step 1: Read in movie data using CSVLoader to take care of double quoted fields
 Step 2: Replace comma in titles with '#com#'
 Step 2: Remove the first tuple (column headers)
@@ -11,7 +17,7 @@ Step 10: Write out as tab seperated file.
 */
 DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
 
-movies = LOAD 'movie/movies.csv' USING CSVLoader() as (movieid:int, title:chararray, genres:chararray);
+movies = LOAD 'data/movies.csv' USING CSVLoader() as (movieid:int, title:chararray, genres:chararray);
 
 fix_delim = FOREACH movies GENERATE movieid, REPLACE(title, ',', '#com#')AS title, genres;
 
