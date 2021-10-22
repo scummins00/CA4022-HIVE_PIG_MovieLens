@@ -1,0 +1,72 @@
+--Let's create a database, table, then populate the table.
+
+CREATE DATABASE IF NOT EXISTS movielens;
+
+USE movielens;
+
+CREATE TABLE IF NOT EXISTS movies_ratings(movieid INT, title STRING, year INT, genres STRING, userid INT, rating INT, ratingtime INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+STORED AS TEXTFILE;
+
+--Title of the top 10 movies with highest number of ratings
+
+--SELECT movieid, title, COUNT(rating) as no_of_ratings
+--FROM movies_ratings
+--GROUP BY movieid, title
+--ORDER BY no_of_ratings DESC
+--LIMIT 10;
+
+--Title of the most liked movie
+--SELECT movieid, title, SUM(rating) AS total_amount_of_rating 
+--FROM movies_ratings
+--WHERE rating >= 4.0
+--GROUP BY movieid, title
+--ORDER BY total_amount_of_rating DESC
+--LIMIT 10;
+
+--User with the highest average rating
+
+--SELECT userid, AVG(rating)
+--FROM movies_ratings
+--GROUP BY userid
+--ORDER BY AVG(rating) DESC
+--LIMIT 10;
+
+-- Complex Queries
+
+--Count number of ratings for each star level
+
+--SELECT rating, COUNT(*) AS number_of_rating
+--FROM movies_ratings
+--GROUP BY rating
+--ORDER BY rating DESC;
+
+--What is the most popular rating
+
+--SELECT rating, COUNT(*) AS number_of_rating
+--FROM movies_ratings
+--GROUP BY rating
+--ORDER BY number_of_rating DESC;
+
+
+--Seing how much each genre appears
+SELECT SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Action') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Adventure') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Animation') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Children\'s') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Comedy') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Crime') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Documentary') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Drama') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Fantasy') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Film-Noir') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Horror') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Musical') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Mystery') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Romance') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Sci-Fi') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Thriller') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'War') THEN 1 ELSE 0 END),
+		SUM(CASE WHEN ARRAY_CONTAINS(SPLIT(genres, ','), 'Western') THEN 1 ELSE 0 END),
+FROM movies_ratings;
