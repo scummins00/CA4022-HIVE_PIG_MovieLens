@@ -13,6 +13,7 @@ Step 4: Seperate title from date.
 Step 6: Write out file with '\t' seperator
 STEP 7: Read it back in with '\t' seperator.
 Step 8: Fix the '#com#'
+Step 9: Fix movies where 'The' comes at end of title
 Step 10: Write out as tab seperated file.
 */
 DEFINE CSVLoader org.apache.pig.piggybank.storage.CSVLoader();
@@ -21,7 +22,7 @@ movies = LOAD 'data/movies.csv' USING CSVLoader() as (movieid:int, title:chararr
 
 fix_delim = FOREACH movies GENERATE movieid, REPLACE(title, ',', '#com#')AS title, genres;
 
-no_header = FILTER fix_delim BY NOT (title == 'title' AND genres == 'genres'); 
+no_header = FILTER fix_delim BY NOT (title == 'title' AND genres == 'genres');
 
 genre_sep = FOREACH no_header GENERATE movieid, title, STRSPLIT(genres, '\\|', -1) as genres;
 
@@ -37,4 +38,8 @@ tab_mov = LOAD 'output/tmp_movies' USING PigStorage() as (movieid:int, title:cha
 
 fix_com = FOREACH tab_mov GENERATE movieid, REPLACE(title, '#com#', ',') AS title, year, genres;
 
-STORE fix_com INTO 'output/cleaned_movies' USING PigStorage();
+fix_the = FOREACH fix_com GENERATE movieid, (ENDSWITH(title, 'The')?CONCAT('The ', REPLACE(title, ', The', '')):title) AS title, year, genres;
+
+STORE fix_the INTO 'output/cleaned_movies' USING PigStorage();
+
+fs -rm -r output/tmp_movies
