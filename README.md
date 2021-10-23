@@ -5,6 +5,8 @@ Please find **all cleaning and analysis scripts** available in the main folder o
 
 Please find **The Final PDF** also available in the main branch of this repository.
 
+Lastly, you will find screenshots of of code execution in the "*Functionality Screenshots*" folder.
+
 ## Local Mode vs MapReduce Mode
 PIG can be used in both *local mode*, and *MapReduce mode*. Using PIG in local mode is considered better for debugging.
 To allow for a better workflow, I have kept a copy of the data and outputs in my repository. There is also a copy of
