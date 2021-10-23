@@ -1,6 +1,7 @@
 /*
 To re-run this script we must ensure the previous output is deleted
 */
+
 fs -rm -r output/cleaned_tags
 
 /*
@@ -30,5 +31,10 @@ grouped = GROUP lower BY (userid, movieid);
 fin = FOREACH grouped GENERATE group.userid AS userid, 
 	group.movieid AS movieid, SUM(lower.length) AS taglength,
 	lower.tag AS tags, lower.timestamp AS timestamps;
+finn = FOREACH fin {
+	tmp = BagToTuple(tags);
+	GENERATE userid, movieid, tmp AS tags, taglength;
+}
 
-STORE fin INTO 'output/cleaned_tags' USING PigStorage();
+STORE finn INTO 'output/cleaned_tags' USING PigStorage();
+
